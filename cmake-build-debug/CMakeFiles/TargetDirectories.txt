@@ -1,0 +1,3 @@
+/Users/eyal/CLionProjects/dataStractures_t1/cmake-build-debug/CMakeFiles/dataStractures_t1.dir
+/Users/eyal/CLionProjects/dataStractures_t1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/eyal/CLionProjects/dataStractures_t1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
