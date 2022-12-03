@@ -5,7 +5,13 @@ class IntList;
 
 class Country
 {
+public:
+    enum eColor{WHITE, BLACK};
+    static const int NOT_FOUND;
+
+private:
     IntList* cities;
+    int* colors;
     int size;
 
 public:
@@ -13,7 +19,10 @@ public:
     ~Country();
 
     bool insertRoad(int city1, int city2);
+    int TownDistance(int currCity, int dest);
 
+private:
+    int isAllBlack(int city);
 };
 
 

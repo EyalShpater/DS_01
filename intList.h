@@ -22,7 +22,7 @@ public:
     void makeEmpty();
     bool isEmpty() const;
 
-    void insert(int x);
+    void insert(int data);
 
 private:
     void insertDataToStart(int data);
