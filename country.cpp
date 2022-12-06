@@ -29,39 +29,49 @@ bool Country::insertRoad(int city1, int city2)
     return true;
 }
 
-int Country::TownDistance(int currCity, int dest)
+int Country::TownDistance(int currCity, int dest) const
 {
-    int distance;
+    int distance = NOT_FOUND;
+    int nextWhite;
+    const IntNode* curr;
+
     colors[currCity] = eColor::BLACK;
+    nextWhite = getWhiteRoad(currCity);
+    curr = cities[currCity].first();
 
     if (currCity == dest)
         return 0;
-
-    if (cities[currCity])
-        return NOT_FOUND;
     else
     {
-        while(!cities[currCity].isEmpty())
-        {
-            if (colors[cities[currCity].first()->getData()] == eColor::WHITE)
-                distance = TownDistance(cities[currCity].first()->getData(), dest);
-
-            if (distance != NOT_FOUND)
-                return distance + 1;
+        if (nextWhite == NOT_FOUND)
             return NOT_FOUND;
+        else {
+            while (curr != nullptr) {
+                if (colors[curr->getData()] == eColor::WHITE)
+                    distance = TownDistance(curr->getData(), dest);
 
+                if (distance != NOT_FOUND)
+                    return distance + 1;
+                curr = curr->getNext();
+            }
+            return NOT_FOUND;
         }
-
     }
 }
 
-int Country::isAllBlack(int city)
+int Country::getWhiteRoad(int city) const
 {
     int answer = NOT_FOUND;
+    const IntNode* curr;
 
-    while(!cities[city].isEmpty() && answer != NOT_FOUND)
-        if (colors[cities[city].first()->getData()] == eColor::WHITE)
-            answer = data;
+    curr = cities[city].first();
+
+    while(curr != nullptr && answer == NOT_FOUND)
+    {
+        if (colors[curr->getData()] == eColor::WHITE)
+            answer = curr->getData();
+        curr = curr->getNext();
+    }
 
     return answer;
 }

@@ -6,6 +6,7 @@ using namespace std;
 int main()
 {
     int numOfCities, numOfRoads;
+    int location, destination, distance;
 
     cout << "Please enter the number of cities" << endl;
     cin >> numOfCities;
@@ -24,6 +25,13 @@ int main()
 
         c.insertRoad(city1, city2);
     }
+
+    cout << "Enter the cities you want to calculate the distance" << endl;
+    cin >> location >> destination;
+
+    distance = c.TownDistance(location, destination);
+
+    cout << "The distance is: " << distance << endl;
 
     return 0;
 }

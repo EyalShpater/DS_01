@@ -11,6 +11,7 @@ public:
     IntNode(int data = 0, IntNode* next = nullptr);
 
     int getData() const { return data; }
+    const IntNode* getNext() const { return next; }
 
     void insertAfter(IntNode* newNode);
     IntNode* deleteAfter();

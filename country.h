@@ -19,10 +19,10 @@ public:
     ~Country();
 
     bool insertRoad(int city1, int city2);
-    int TownDistance(int currCity, int dest);
+    int TownDistance(int currCity, int dest) const;
 
 private:
-    int isAllBlack(int city);
+    int getWhiteRoad(int city) const;
 };
 
 

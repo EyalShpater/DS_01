@@ -1,7 +1,7 @@
 #ifndef __INT_LIST_H
 #define __INT_LIST_H
 
-class IntNode;
+#include "intNode.h"
 
 class IntList
 {
@@ -16,7 +16,7 @@ public:
     IntList();
     ~IntList();
 
-    const IntNode* first() const { return head; }
+    const IntNode* first() const { return head->next; }
     const IntNode* last() const { return tail; }
 
     void makeEmpty();
