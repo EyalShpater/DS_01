@@ -46,7 +46,8 @@ int Country::TownDistance(int currCity, int dest) const
         if (nextWhite == NOT_FOUND)
             return NOT_FOUND;
         else {
-            while (curr != nullptr) {
+            while (curr != nullptr)
+            {
                 if (colors[curr->getData()] == eColor::WHITE)
                     distance = TownDistance(curr->getData(), dest);
 
