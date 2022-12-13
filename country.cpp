@@ -1,6 +1,8 @@
 #include "country.h"
 #include "intList.h"
 #include "intNode.h"
+#include "stack.h"
+#include "item.h"
 
 const int Country::NOT_FOUND = -1;
 
@@ -59,6 +61,83 @@ int Country::TownDistance(int currCity, int dest) const
         }
     }
 }
+
+int Country::TownDistanceIterative(int currCity, int dest) const
+{
+    Stack s;
+    Item* curr;
+    const IntNode* iter;
+    int returnValue;
+
+    s.Push(Item(currCity, dest, getWhiteRoad(currCity), Item::eCurrLine::START));
+
+    while (!s.IsEmpty())
+    {
+        curr = s.Pop();
+
+        colors[curr->getCurrCity()] = eColor::BLACK;
+
+        if (curr->getLine() == Item::eCurrLine::START)
+        {
+            if (curr->getCurrCity() == curr->getDest())
+                returnValue = 0;
+            else
+            {
+                if (curr->getNextWhite() == NOT_FOUND)
+                    returnValue = NOT_FOUND;
+                else
+                {
+                    iter = cities[curr->getCurrCity()].first();
+
+                    while(iter != nullptr)
+                    {
+                        if (colors[iter->getData()] == eColor::WHITE)
+                        {
+                            curr->setLine(Item::eCurrLine::AFTER_FIRST);
+                            s.Push(*curr);
+                            s.Push(Item (iter->getData(), curr->getDest(), getWhiteRoad(iter->getData()), Item::eCurrLine::START));
+
+                            iter = nullptr;
+                        }
+                        else
+                            iter = iter->getNext();
+                    }
+                }
+            }
+        }
+        else if (curr->getLine() == Item::eCurrLine::AFTER_FIRST)
+        {
+            if (returnValue != NOT_FOUND)
+                returnValue++;
+            else
+            {
+                iter = cities[curr->getCurrCity()].first();
+                colors[curr->getCurrCity()] = eColor::BLACK;
+                while(iter != nullptr) {
+                    if (colors[iter->getData()] == eColor::WHITE) {
+                        curr->setLine(Item::eCurrLine::AFTER_FIRST);
+                        s.Push(*curr);
+                        s.Push(Item(iter->getData(), curr->getDest(), getWhiteRoad(iter->getData()),
+                                    Item::eCurrLine::START));
+
+                        iter = nullptr;
+                    } else
+                        iter = iter->getNext();
+                }
+            }
+        }
+    }
+
+
+    return returnValue;
+}
+
+void Country::initColors()
+{
+    for (int i = 0; i < size; ++i)
+        colors[i] = eColor::WHITE;
+}
+
 
 int Country::getWhiteRoad(int city) const
 {

@@ -20,6 +20,8 @@ public:
 
     bool insertRoad(int city1, int city2);
     int TownDistance(int currCity, int dest) const;
+    int TownDistanceIterative(int currCity, int dest) const;
+    void initColors();
 
 private:
     int getWhiteRoad(int city) const;

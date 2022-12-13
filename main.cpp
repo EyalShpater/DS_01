@@ -30,8 +30,12 @@ int main()
     cin >> location >> destination;
 
     distance = c.TownDistance(location, destination);
+    cout << "The distance after recursive is: " << distance << endl;
 
-    cout << "The distance is: " << distance << endl;
+    c.initColors();
+
+    distance = c.TownDistanceIterative(location, destination);
+    cout << "The distance after iterative is: " << distance << endl;
 
     return 0;
 }
