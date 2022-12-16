@@ -2,6 +2,7 @@
 #define __COUNTRY_H
 
 class IntList;
+class IntNode;
 
 class Country
 {
@@ -19,12 +20,16 @@ public:
     ~Country();
 
     bool insertRoad(int city1, int city2);
+    void getRoads(int numOfRoads);
     int TownDistance(int currCity, int dest) const;
     int TownDistanceIterative(int currCity, int dest) const;
     void initColors();
 
+    bool isCityValid(int city) const;
+    friend bool isCityValid(int city, int size);
+
 private:
-    int getWhiteRoad(int city) const;
+    IntNode* getWhiteRoad(int city) const;
 };
 
 

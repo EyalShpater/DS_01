@@ -4,7 +4,7 @@
 
 Stack::Stack()
 {
-    top = new ItemNode(Item(-1, -1, -1, -1)); // Dummy Head
+    top = new ItemNode(Item(-1, -1, nullptr)); // Dummy Head
 }
 
 Stack::~Stack()

@@ -16,8 +16,8 @@ public:
     IntList();
     ~IntList();
 
-    const IntNode* first() const { return head->next; }
-    const IntNode* last() const { return tail; }
+    IntNode* first() const { return head->next; }
+    IntNode* last() const { return tail; }
 
     void makeEmpty();
     bool isEmpty() const;

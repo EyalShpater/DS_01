@@ -3,8 +3,7 @@ using namespace std;
 
 #include "country.h"
 
-int main()
-{
+int main() {
     int numOfCities, numOfRoads;
     int location, destination, distance;
 
@@ -17,17 +16,13 @@ int main()
     cout << "Please enter the roads" << endl;
 
     Country c(numOfCities);
+    c.getRoads(numOfRoads);
 
-    for (int i = 1; i <= numOfRoads; ++i)
+    do
     {
-        int city1, city2;
-        cin >> city1 >> city2;
-
-        c.insertRoad(city1, city2);
-    }
-
-    cout << "Enter the cities you want to calculate the distance" << endl;
-    cin >> location >> destination;
+        cout << "Enter the cities you want to calculate the distance" << endl;
+        cin >> location >> destination;
+    } while (!isCityValid(location, numOfCities) || !isCityValid(destination, numOfCities));
 
     distance = c.TownDistance(location, destination);
     cout << "The distance after recursive is: " << distance << endl;

@@ -4,6 +4,9 @@
 #include "stack.h"
 #include "item.h"
 
+#include <iostream>
+using namespace std;
+
 const int Country::NOT_FOUND = -1;
 
 Country::Country(int size)
@@ -11,9 +14,6 @@ Country::Country(int size)
     cities = new IntList[size + 1];
     colors = new int[size +1];
     this->size = size + 1;
-
-    for (int i = 0; i < this->size; ++i)
-        colors[i] = eColor::WHITE;
 }
 
 Country::~Country()
@@ -31,10 +31,27 @@ bool Country::insertRoad(int city1, int city2)
     return true;
 }
 
+void Country::getRoads(int numOfRoads)
+{
+    for (int i = 1; i <= numOfRoads; ++i)
+    {
+        int city1, city2;
+        cin >> city1 >> city2;
+
+        if (isCityValid(city1) && isCityValid(city2))
+            insertRoad(city1, city2);
+        else
+        {
+            cout << "invalid road! try again\n";
+            --i;
+        }
+    }
+}
+
 int Country::TownDistance(int currCity, int dest) const
 {
     int distance = NOT_FOUND;
-    int nextWhite;
+    IntNode* nextWhite;
     const IntNode* curr;
 
     colors[currCity] = eColor::BLACK;
@@ -45,7 +62,7 @@ int Country::TownDistance(int currCity, int dest) const
         return 0;
     else
     {
-        if (nextWhite == NOT_FOUND)
+        if (nextWhite == nullptr)
             return NOT_FOUND;
         else {
             while (curr != nullptr)
@@ -55,6 +72,7 @@ int Country::TownDistance(int currCity, int dest) const
 
                 if (distance != NOT_FOUND)
                     return distance + 1;
+
                 curr = curr->getNext();
             }
             return NOT_FOUND;
@@ -65,44 +83,27 @@ int Country::TownDistance(int currCity, int dest) const
 int Country::TownDistanceIterative(int currCity, int dest) const
 {
     Stack s;
-    Item* curr;
-    const IntNode* iter;
+    Item *curr;
     int returnValue;
 
-    s.Push(Item(currCity, dest, getWhiteRoad(currCity), Item::eCurrLine::START));
+    s.Push(Item(currCity, Item::eCurrLine::START, getWhiteRoad(currCity)));
 
     while (!s.IsEmpty())
     {
         curr = s.Pop();
-
         colors[curr->getCurrCity()] = eColor::BLACK;
 
         if (curr->getLine() == Item::eCurrLine::START)
         {
-            if (curr->getCurrCity() == curr->getDest())
+            if (curr->getCurrCity() == dest)
                 returnValue = 0;
+            else if (curr->getNextWhite() == nullptr)
+                    returnValue = NOT_FOUND;
             else
             {
-                if (curr->getNextWhite() == NOT_FOUND)
-                    returnValue = NOT_FOUND;
-                else
-                {
-                    iter = cities[curr->getCurrCity()].first();
-
-                    while(iter != nullptr)
-                    {
-                        if (colors[iter->getData()] == eColor::WHITE)
-                        {
-                            curr->setLine(Item::eCurrLine::AFTER_FIRST);
-                            s.Push(*curr);
-                            s.Push(Item (iter->getData(), curr->getDest(), getWhiteRoad(iter->getData()), Item::eCurrLine::START));
-
-                            iter = nullptr;
-                        }
-                        else
-                            iter = iter->getNext();
-                    }
-                }
+                curr->setLine(Item::eCurrLine::AFTER_FIRST);
+                s.Push(*curr);
+                s.Push(Item(curr->getNextWhite()->getData(), Item::eCurrLine::START, getWhiteRoad(curr->getNextWhite()->getData())));
             }
         }
         else if (curr->getLine() == Item::eCurrLine::AFTER_FIRST)
@@ -111,23 +112,18 @@ int Country::TownDistanceIterative(int currCity, int dest) const
                 returnValue++;
             else
             {
-                iter = cities[curr->getCurrCity()].first();
-                colors[curr->getCurrCity()] = eColor::BLACK;
-                while(iter != nullptr) {
-                    if (colors[iter->getData()] == eColor::WHITE) {
-                        curr->setLine(Item::eCurrLine::AFTER_FIRST);
-                        s.Push(*curr);
-                        s.Push(Item(iter->getData(), curr->getDest(), getWhiteRoad(iter->getData()),
-                                    Item::eCurrLine::START));
+                IntNode* nextWhite = getWhiteRoad(curr->getCurrCity());
 
-                        iter = nullptr;
-                    } else
-                        iter = iter->getNext();
+                if (nextWhite == nullptr)
+                    returnValue = NOT_FOUND;
+                else
+                {
+                    s.Push(*curr);
+                    s.Push(Item(nextWhite->getData(), Item::eCurrLine::START, getWhiteRoad(nextWhite->getData())));
                 }
             }
         }
     }
-
 
     return returnValue;
 }
@@ -138,18 +134,27 @@ void Country::initColors()
         colors[i] = eColor::WHITE;
 }
 
-
-int Country::getWhiteRoad(int city) const
+bool Country::isCityValid(int city) const
 {
-    int answer = NOT_FOUND;
-    const IntNode* curr;
+    return city >= 1 && city < size;
+}
+
+bool isCityValid(int city, int size)
+{
+    return city >= 1 && city < size;
+}
+
+IntNode* Country::getWhiteRoad(int city) const
+{
+    IntNode* answer = nullptr;
+    IntNode* curr;
 
     curr = cities[city].first();
 
-    while(curr != nullptr && answer == NOT_FOUND)
+    while(curr != nullptr && answer == nullptr)
     {
         if (colors[curr->getData()] == eColor::WHITE)
-            answer = curr->getData();
+            answer = curr;
         curr = curr->getNext();
     }
 

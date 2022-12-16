@@ -1,9 +1,9 @@
 #include "item.h"
 
-Item::Item(int currCity, int dest, int nextWhite, int line)
+Item::Item(int currCity, /*int nextWhite,*/ int line, IntNode* nextWhite)
 {
     this->currCity = currCity;
-    this->dest = dest;
-    this->nextWhite = nextWhite;
+    //this->nextWhite = nextWhite;
     this->line = line;
+    this->nextWhite = nextWhite;
 }
